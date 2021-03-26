@@ -1,4 +1,4 @@
-##--Dydy2412--& GalTech##
+##--Dydy2412--& GalTech mais pas trop nn plus##
 from lib.labygen_unp import gen_laby_unp
 from lib.labygen_exr import gen_laby_ex
 from lib.labyprinter import print_to_png
