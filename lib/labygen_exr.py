@@ -1,6 +1,10 @@
 ##--Dydy2412--##
 from random import shuffle, randint
 
+def gen_matrix(L_matrix, l_matrix):
+    '''Generer les 3 matrices pour notre labyrynthe'''
+    return [[i+((L_matrix+1)*j) for i in range(l_matrix)] for j in range(L_matrix)], [[False for i in range(l_matrix+1)] for j in range(L_matrix)], [[False for i in range(l_matrix)] for j in range(L_matrix+1)]
+
 def get_all_dir(cell_x_dir, cell_y_dir):
     '''retourne toutes les directions possibles que peu prendre la tête'''
     return [(cell_x_dir+i,cell_y_dir+j) for i in range(-1,2) for j in range(-1,2) if bool(i == 0) != bool(j == 0)]

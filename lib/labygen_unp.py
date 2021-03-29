@@ -1,6 +1,11 @@
 ##--Dydy2412--##
 from random import shuffle
 
+def gen_matrix(L_matrix, l_matrix):
+    '''Generer les 3 matrices pour notre labyrynthe'''
+    return [[i+((L_matrix+1)*j) for i in range(l_matrix)] for j in range(L_matrix)], [[False for i in range(l_matrix+1)] for j in range(L_matrix)], [[False for i in range(l_matrix)] for j in range(L_matrix+1)]
+
+
 def is_pair(i):
     '''Test si un nombre est pair'''
     return i%2 == 0
