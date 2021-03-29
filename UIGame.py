@@ -1,3 +1,4 @@
+##--Dydy2412--##
 import pygame as pg
 from lib.labygen_exr import gen_matrix, gen_laby_ex
 import sys
@@ -29,6 +30,7 @@ PLAYER_COORD = (int(WALL_SIZE*0.25), int(WALL_SIZE*0.25))
 PALYER_SPEED = 2
 
 class Player(pg.sprite.Sprite):
+    '''Sprite that control the user'''
 
     def __init__(self, size : int, coord : tuple, speed : int):
         super().__init__()
@@ -71,6 +73,7 @@ class Player(pg.sprite.Sprite):
         self.rect. y = self.y
 
 class Wall(pg.sprite.Sprite):
+    '''Wall of the Labyrinth'''
 
     def __init__(self, height : int, width : int, coords : tuple):
         super().__init__()
@@ -91,6 +94,7 @@ class Wall(pg.sprite.Sprite):
         self.rect.y = self.y
 
 class Finish(pg.sprite.Sprite):
+    '''End arera'''
 
     def __init__(self, height : int, width : int, coords : tuple):
         super().__init__()
@@ -112,6 +116,7 @@ class Finish(pg.sprite.Sprite):
 
 
 class Application():
+    '''Main Frame'''
 
     def __init__(self, name : str, win_size : tuple, laby_size : tuple, wall_size : tuple, fps : int):
         
@@ -235,7 +240,7 @@ class Application():
         pg.display.flip()
 
 if __name__ == "__main__":
-    sys.setrecursionlimit(5000)
+    sys.setrecursionlimit(5000) #Allow bigger generation
     app = Application(WIN_TITLE, 
                         (WALL_SIZE*LARGE+WALL_WIDTH,
                             WALL_SIZE*LONG+WALL_WIDTH),
