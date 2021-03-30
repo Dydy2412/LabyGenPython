@@ -2,6 +2,7 @@
 import pygame as pg
 from lib.labygen_exr import gen_matrix, gen_laby_ex
 import sys
+Vec = pg.math.Vector2
 
 #TOOL
 COLOR = {
@@ -17,22 +18,23 @@ COLOR = {
 }
 
 ##--CONST--##
-LONG = 50
-LARGE = 50
+LONG = 10
+LARGE = 10
 
-WALL_SIZE = 10
+WALL_SIZE = 40
 WALL_WIDTH = 2
 WIN_TITLE = 'LabyGame'
 WIN_FPS = 60
 
 PLAYER_SIZE = int(0.2*WALL_SIZE)
 PLAYER_COORD = (int(WALL_SIZE*0.25), int(WALL_SIZE*0.25))
-PALYER_SPEED = 2
+PALYER_SPEED = 0.4
+PLAYER_FRICT = -0.1
 
 class Player(pg.sprite.Sprite):
     '''Sprite that control the user'''
 
-    def __init__(self, size : int, coord : tuple, speed : int):
+    def __init__(self, size : int, coord : tuple, speed : int, frict : int):
         super().__init__()
 
         #Parameter
@@ -40,10 +42,16 @@ class Player(pg.sprite.Sprite):
         self.x = coord[0]
         self.y = coord[1]
         self.speed = speed
+        self.frict = frict
 
         #Image
         self.image = pg.Surface((self.size, self.size)).convert_alpha()
         self.image.fill(COLOR["RED"])
+
+        #PHYSICS
+        self.pos = Vec(self.x, self.y)
+        self.vel = Vec(0, 0)
+        self.acc = Vec(0, 0)
 
         #Rect
         self.rect = self.image.get_rect()
@@ -51,26 +59,33 @@ class Player(pg.sprite.Sprite):
 
     def update(self):
         '''Constantly update by all-sprite group'''
+        self.acc = Vec(0, 0)
 
         #keyboard input
         keys = pg.key.get_pressed()
 
         if keys[pg.K_LEFT]:
-            self.rect.x -= self.speed
+            self.acc.x = -self.speed
         
         if keys[pg.K_RIGHT]:
-            self.rect.x += self.speed
+            self.acc.x = self.speed
 
         if keys[pg.K_UP]:
-            self.rect.y -= self.speed
+            self.acc.y = -self.speed
 
         if keys[pg.K_DOWN]:
-            self.rect.y += self.speed
+            self.acc.y = self.speed
+
+        self.acc += self.vel*self.frict
+        self.vel += self.acc
+        self.pos += self.vel + 0.5*self.acc
+        self.rect.center = self.pos
 
     def reset_pos(self):
         '''Reset Player Position'''
-        self.rect.x = self.x
-        self.rect. y = self.y
+        self.pos = Vec(self.x, self.y)
+        self.vel = Vec(0, 0)
+        self.acc = Vec(0, 0)
 
 class Wall(pg.sprite.Sprite):
     '''Wall of the Labyrinth'''
@@ -181,7 +196,7 @@ class Application():
         self.walls_sprites.empty()
 
         #Create Player
-        self.player = Player(PLAYER_SIZE, PLAYER_COORD, PALYER_SPEED)
+        self.player = Player(PLAYER_SIZE, PLAYER_COORD, PALYER_SPEED, PLAYER_FRICT)
         self.all_sprites.add(self.player)
 
         #Genrate labyrinth
